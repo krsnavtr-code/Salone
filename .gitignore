@@ -1,0 +1,43 @@
+# Dependencies
+node_modules
+yarn.lock
+package-lock.json
+
+# Environment
+.env
+
+# Build
+build
+
+# Editor
+.idea
+.vscode
+
+# Logs
+logs
+
+# Temporary
+.DS_Store
+Thumbs.db
+
+# Database
+*.sqlite
+*.db
+
+# IDE
+.idea
+.vscode
+
+# Vite
+vite.config.js
+vite.config.ts
+
+# Server
+server/node_modules
+server/package-lock.json
+server/yarn.lock
+
+# Client
+client/node_modules
+client/package-lock.json
+client/yarn.lock

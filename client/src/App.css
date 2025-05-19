@@ -1,0 +1,112 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --primary-color: #ff6b6b;
+    --primary-dark: #ff4747;
+    --secondary-color: #4ecdc4;
+    --text-color: #2d3436;
+    --background-color: #f8f9fa;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.5;
+    background-color: var(--background-color);
+    color: var(--text-color);
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-pink-600 text-white px-4 py-2 rounded-md hover:bg-pink-700 transition-colors duration-200;
+  }
+
+  .card {
+    @apply bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-200;
+  }
+
+  .form-input {
+    @apply mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500;
+  }
+
+  .nav-link {
+    @apply px-1 pt-1 text-sm font-medium transition-colors duration-200;
+  }
+
+  .nav-link.active {
+    @apply border-b-2 border-pink-500 text-gray-900;
+  }
+
+  .nav-link:hover {
+    @apply border-b-2 border-gray-300 text-gray-700;
+  }
+
+  .service-card {
+    @apply bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-200;
+  }
+/* Forms */
+.form-control {
+  margin-top: 0.25rem;
+  width: 100%;
+  border-radius: 0.25rem;
+  border: 1px solid #e2e8f0;
+  padding: 0.5rem;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+}
+
+/* Loading */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 4rem;
+}
+
+/* Animations */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
