@@ -62,6 +62,14 @@ export default function OffersManagement() {
     }));
   };
 
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setNewOffer((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   const handleServicesChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedServices = Array.from(e.target.selectedOptions, (option) => option.value);
     setNewOffer((prev) => ({
@@ -148,7 +156,7 @@ export default function OffersManagement() {
               <select
                 name="discountType"
                 value={newOffer.discountType}
-                onChange={handleInputChange}
+                onChange={handleSelectChange}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500"
               >
                 <option value="percentage">Percentage (%)</option>

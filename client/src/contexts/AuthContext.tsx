@@ -45,11 +45,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
       setUser(user);
-      navigate('/');
       return true;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Login error:', error);
-      return false;
+      throw error.response || error;
     }
   };
 

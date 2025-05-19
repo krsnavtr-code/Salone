@@ -12,14 +12,13 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      setError('');
       const success = await login(email, password);
-      if (success) {
-        navigate('/');
-      } else {
+      if (!success) {
         setError('Invalid credentials');
       }
-    } catch (err) {
-      setError('An error occurred during login');
+    } catch (error: any) {
+      setError(error.response?.data?.message || 'An error occurred during login');
     }
   };
 

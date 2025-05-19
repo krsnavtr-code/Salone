@@ -32,30 +32,3 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
-export const authApi = {
-  login: async (email, password) => {
-    return api.post('/auth/login', { email, password });
-  },
-  register: async (userData) => {
-    return api.post('/auth/register', userData);
-  },
-};
-
-export const servicesApi = {
-  getAll: async () => {
-    return api.get('/services');
-  },
-  getById: async (id) => {
-    return api.get(`/services/${id}`);
-  },
-};
-
-export const appointmentsApi = {
-  create: async (appointmentData) => {
-    return api.post('/appointments', appointmentData);
-  },
-  getAll: async () => {
-    return api.get('/appointments');
-  },
-};
