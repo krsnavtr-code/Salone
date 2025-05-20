@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs';
 const User = sequelize.define('user', {
   id: {
     type: DataTypes.INTEGER,
+    allowNull: false,
     primaryKey: true,
     autoIncrement: true
   },
@@ -33,20 +34,14 @@ const User = sequelize.define('user', {
   },
   otp_expiry: {
     type: DataTypes.DATE
-  },
-  createdAt: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW
-  },
-  updatedAt: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW
   }
 }, {
+  tableName: 'users',
   timestamps: true,
   underscored: true
 });
 
+// Password methods
 User.prototype.matchPassword = async function(enteredPassword) {
   return bcrypt.compare(enteredPassword, this.password_hash);
 };

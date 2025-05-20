@@ -1,6 +1,5 @@
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import sequelize from './config/db.js';
@@ -9,12 +8,15 @@ import authRoutes from './routes/auth.routes.js';
 import serviceRoutes from './routes/service.routes.js';
 import appointmentRoutes from './routes/appointment.routes.js';
 
-// Load environment variables from root directory
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const rootPath = path.resolve(__dirname, '../');
-console.log('Loading environment variables from:', path.join(rootPath, '.env'));
-dotenv.config({ path: path.join(rootPath, '.env') });
+// Log all environment variables for debugging
+console.log('Environment variables loaded:', {
+  PORT: process.env.PORT,
+  DB_HOST: process.env.DB_HOST,
+  DB_USER: process.env.DB_USER,
+  DB_NAME: process.env.DB_NAME,
+  DB_PORT: process.env.DB_PORT,
+  JWT_SECRET: process.env.JWT_SECRET ? 'SET' : 'NOT SET'
+});
 
 // Check if JWT_SECRET is set
 if (!process.env.JWT_SECRET) {

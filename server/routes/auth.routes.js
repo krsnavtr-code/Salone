@@ -46,59 +46,44 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'Email already registered' });
     }
 
-    try {
-      // Hash password
-      const hashedPassword = await bcrypt.hash(password, 10);
-      
-      // Create user
-      const user = await User.create({ 
-        name, 
-        email, 
-        phone, 
-        password_hash: hashedPassword,
-        role: 'user'
-      });
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-      // Generate token and return response
-      const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '30d' });
-      const userData = {
+    // Create new user
+    const user = await User.create({
+      name,
+      email,
+      phone,
+      password_hash: hashedPassword,
+      role: 'client'
+    });
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: user.id },
+      process.env.JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
+    // Send response with token and user data (excluding password)
+    res.status(201).json({
+      token,
+      user: {
         id: user.id,
         name: user.name,
         email: user.email,
         phone: user.phone,
-        role: user.role
-      };
+        role: user.role,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt
+      }
+    });
 
-      res.status(201).json({ token, user: userData });
-    } catch (error) {
-      console.error('Registration error:', error);
-      res.status(500).json({ 
-        message: error.message || 'Internal server error',
-        error: error instanceof Error ? error.message : 'Unknown error'
-      });
-    }
   } catch (error) {
     console.error('Registration error:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: 'Registration failed', error: error.message });
   }
-}); // removed extra catch block
-
-// router.post('/login', async (req, res) => {
-//   try {
-//     const { email, password } = req.body;
-
-//     // Validate input
-//     if (!email || !password) {
-//       return res.status(400).json({ message: 'Email and password are required' });
-//     }
-
-//     // Find user by email
-//   } catch (error) {
-//     console.error('Login error:', error);
-//     res.status(500).json({ message: 'Internal server error' });
-//   }
-// });
-
+});
 
 router.post('/login', async (req, res) => {
   try {
