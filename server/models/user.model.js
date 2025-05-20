@@ -3,6 +3,11 @@ import sequelize from '../config/db.js';
 import bcrypt from 'bcryptjs';
 
 const User = sequelize.define('user', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
   name: {
     type: DataTypes.STRING,
     allowNull: false
@@ -21,28 +26,29 @@ const User = sequelize.define('user', {
   },
   role: {
     type: DataTypes.STRING,
-    defaultValue: 'client',
-    values: ['client', 'admin']
+    defaultValue: 'client'
   },
   otp_code: {
     type: DataTypes.STRING
   },
   otp_expiry: {
     type: DataTypes.DATE
+  },
+  createdAt: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW
+  },
+  updatedAt: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW
   }
 }, {
-  tableName: 'users',
-  timestamps: true
+  timestamps: true,
+  underscored: true
 });
 
 User.prototype.matchPassword = async function(enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password_hash);
+  return bcrypt.compare(enteredPassword, this.password_hash);
 };
-
-User.beforeCreate(async (user, options) => {
-  if (!user.changed('password_hash')) return;
-  const salt = await bcrypt.genSalt(10);
-  user.password_hash = await bcrypt.hash(user.password_hash, salt);
-});
 
 export default User;

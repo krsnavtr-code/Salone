@@ -20,17 +20,46 @@ export default function Register() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(''); // Clear any previous errors
+
     try {
+      // Validate form data
+      if (!formData.name.trim()) {
+        setError('Please enter your name');
+        return;
+      }
+      if (!formData.email.trim()) {
+        setError('Please enter your email');
+        return;
+      }
+      if (!formData.password.trim()) {
+        setError('Please enter a password');
+        return;
+      }
+
+      // Register with our backend
       const success = await register(formData);
       if (success) {
-        navigate("/");
+        // Show success message and redirect to appointments page
+        setError('Registration successful! Redirecting to login...');
+        setTimeout(() => {
+          navigate('/login');
+        }, 1000); // Reduced delay to 1 second
       } else {
-        setError("Registration failed");
+        setError("Registration failed. Please check your details and try again.");
       }
-    } catch (err) {
-      setError("An error occurred during registration");
+    } catch (error: any) {
+      // Handle specific error cases
+      if (error.message.includes('email already registered')) {
+        setError('This email is already registered. Please use a different email or login.');
+      } else if (error.message.includes('Invalid credentials')) {
+        setError('Invalid email or password. Please try again.');
+      } else {
+        setError(error.message || "An unexpected error occurred during registration. Please try again later.");
+      }
     }
   };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 to-white flex items-center justify-center px-4 py-12">
@@ -43,8 +72,16 @@ export default function Register() {
         </p>
 
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-4 text-sm">
-            {error}
+          <div className="mb-4 p-4 rounded-lg">
+            {error.includes('successful') ? (
+              <div className="bg-green-50 text-green-600">
+                {error}
+              </div>
+            ) : (
+              <div className="bg-red-50 text-red-600">
+                {error}
+              </div>
+            )}
           </div>
         )}
 

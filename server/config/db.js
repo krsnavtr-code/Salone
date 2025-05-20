@@ -1,25 +1,27 @@
 import { Sequelize } from 'sequelize';
-import dotenv from 'dotenv';
+import fs from 'fs';
 
-dotenv.config();
+// SQLite configuration
+const sequelize = new Sequelize({
+  dialect: 'sqlite',
+  storage: './database.sqlite',
+  logging: false,
+});
 
-const sequelize = new Sequelize(
-  process.env.DB_NAME || 'salone',
-  process.env.DB_USER || 'root',
-  process.env.DB_PASSWORD || '', 
-  {
-    host: process.env.DB_HOST || 'localhost',
-    dialect: 'mysql',
-    port: process.env.DB_PORT || 3306,
-    logging: false,
-    dialectOptions: {
-      multipleStatements: true
-    },
-    define: {
-      timestamps: true,
-      underscored: true
-    }
-  }
-);
+// Create database file if it doesn't exist
+if (!fs.existsSync('./database.sqlite')) {
+  fs.writeFileSync('./database.sqlite', '');
+  console.log('Created SQLite database file');
+}
+
+// Test database connection
+sequelize.authenticate()
+  .then(() => {
+    console.log('Database connection established successfully');
+  })
+  .catch((err) => {
+    console.error('Unable to connect to the database:', err);
+    process.exit(1); // Exit if database connection fails
+  });
 
 export default sequelize;

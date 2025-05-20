@@ -40,11 +40,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
+      // First, try to login with our backend
       const response = await api.post('/auth/login', { email, password });
       const { token, user } = response.data;
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
       setUser(user);
+
+      // If we need to make external API calls, use the proxy
+      // Example:
+      // const externalResponse = await api.post('/auth/proxy', {
+      //   url: 'https://extensions.aitopia.ai/ai/prompts',
+      //   method: 'POST',
+      //   body: {
+      //     // your request body here
+      //   }
+      // });
+
       return true;
     } catch (error: any) {
       console.error('Login error:', error);
@@ -61,14 +73,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const response = await api.post('/auth/register', userData);
       const { token, user } = response.data;
+      if (!token || !user) {
+        throw new Error('Invalid response from server');
+      }
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
       setUser(user);
-      navigate('/');
       return true;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Registration error:', error);
-      return false;
+      if (error.response?.data?.message) {
+        throw new Error(error.response.data.message);
+      } else if (error.message) {
+        throw new Error(error.message);
+      }
+      throw new Error('Registration failed. Please check your details and try again.');
     }
   };
 
