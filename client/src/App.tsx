@@ -17,6 +17,7 @@ import Analytics from "./components/admin/Analytics";
 import OffersManagement from "./components/admin/OffersManagement";
 import Settings from "./components/admin/Settings";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Profile from "./components/Profile";
 import About from "./pages/About";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Terms from "./pages/Terms";
@@ -41,6 +42,14 @@ export default function App() {
             <Route path="/terms" element={<Terms />} />
             <Route path="/testimonials" element={<Testimonials />} />
             <Route path="/contact" element={<Contact />} />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/admin"
               element={

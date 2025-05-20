@@ -106,11 +106,10 @@ const Navbar = () => {
             )}
             {user && (
               <Link
-                to="/logout"
-                onClick={handleLogout}
+                to="/profile"
                 className="inline-flex items-center my-2 px-2 py-1 border border-transparent text-sm font-medium rounded-md text-pink-700 bg-pink-100 hover:bg-pink-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 transition-all ml-4"
               >
-                Logout
+                Profile
               </Link>
             )}
           </div>
