@@ -83,6 +83,23 @@ router.post('/register', async (req, res) => {
   }
 }); // removed extra catch block
 
+// router.post('/login', async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
+
+//     // Validate input
+//     if (!email || !password) {
+//       return res.status(400).json({ message: 'Email and password are required' });
+//     }
+
+//     // Find user by email
+//   } catch (error) {
+//     console.error('Login error:', error);
+//     res.status(500).json({ message: 'Internal server error' });
+//   }
+// });
+
+
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -130,5 +147,11 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+
+// Logout route
+router.get('/logout', (req, res) => {
+  res.status(200).json({ message: 'Logged out successfully' });
+});
+
 
 export default router;

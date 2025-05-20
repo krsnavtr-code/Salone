@@ -29,6 +29,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -40,27 +41,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
+      setError(null); // Clear any previous error
       // First, try to login with our backend
       const response = await api.post('/auth/login', { email, password });
       const { token, user } = response.data;
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
       setUser(user);
-
-      // If we need to make external API calls, use the proxy
-      // Example:
-      // const externalResponse = await api.post('/auth/proxy', {
-      //   url: 'https://extensions.aitopia.ai/ai/prompts',
-      //   method: 'POST',
-      //   body: {
-      //     // your request body here
-      //   }
-      // });
-
+      // Show success message and redirect
+      setError('Login successful! Redirecting to home...');
+      setTimeout(() => {
+        setError(null); // Clear success message before redirect
+        navigate('/');
+      }, 1000);
       return true;
     } catch (error: any) {
       console.error('Login error:', error);
-      throw error.response || error;
+      setError(error.response?.data?.message || error.message || 'Login failed. Please check your credentials and try again.');
+      throw error;
     }
   };
 
@@ -91,22 +89,40 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    setUser(null);
-    navigate('/login');
+  const logout = async () => {
+    try {
+      // Call the logout endpoint
+      await api.get('/auth/logout');
+      // Clear local storage and user state
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      setUser(null);
+      // Redirect to login page
+      navigate('/login');
+    } catch (error: any) {
+      console.error('Logout error:', error);
+      // Still clear local storage even if API call fails
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      setUser(null);
+      navigate('/login');
+    }
   };
 
   const value = {
     user,
     loading,
+    error,
     login,
     register,
     logout,
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {

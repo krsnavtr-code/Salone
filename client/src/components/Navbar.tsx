@@ -3,9 +3,13 @@ import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 const Navbar = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleLogout = async () => {
+    await logout();
+  };
 
   return (
     <nav className="bg-white shadow-sm">
@@ -98,6 +102,15 @@ const Navbar = () => {
                 className="inline-flex items-center my-2 px-2 py-1 border border-transparent text-sm font-medium rounded-md text-pink-700 bg-pink-100 hover:bg-pink-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 transition-all ml-4"
               >
                 Login
+              </Link>
+            )}
+            {user && (
+              <Link
+                to="/logout"
+                onClick={handleLogout}
+                className="inline-flex items-center my-2 px-2 py-1 border border-transparent text-sm font-medium rounded-md text-pink-700 bg-pink-100 hover:bg-pink-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 transition-all ml-4"
+              >
+                Logout
               </Link>
             )}
           </div>
