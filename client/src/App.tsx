@@ -22,6 +22,7 @@ import About from "./pages/About";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Terms from "./pages/Terms";
 import Home from "./pages/Home";
+import Booking from "./pages/Booking";
 import "./App.css";
 
 export default function App() {
@@ -34,13 +35,30 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/services" element={<Services />} />
+            <Route path="/services" element={
+              <ProtectedRoute>
+                <Services />
+              </ProtectedRoute>
+            } />
             <Route path="/gallery" element={<Gallery />} />
-            <Route path="/offers" element={<Offers />} />
+            <Route path="/offers" element={
+              <ProtectedRoute>
+                <Offers />
+              </ProtectedRoute>
+            } />
+            <Route path="/booking" element={
+              <ProtectedRoute>
+                <Booking />
+              </ProtectedRoute>
+            } />
             <Route path="/about" element={<About />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/terms" element={<Terms />} />
-            <Route path="/testimonials" element={<Testimonials />} />
+            <Route path="/testimonials" element={
+              <ProtectedRoute>
+                <Testimonials />
+              </ProtectedRoute>
+            } />
             <Route path="/contact" element={<Contact />} />
             <Route
               path="/profile"

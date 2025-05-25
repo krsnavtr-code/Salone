@@ -1,9 +1,20 @@
 import React from "react";
 import { useAuth } from "../contexts/AuthContext";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
 const Home = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleBookAppointment = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!user) {
+      navigate('/login', { state: { from: '/booking' } });
+    } else {
+      navigate('/booking');
+    }
+  };
 
   return (
     <div className="bg-white text-gray-800">
@@ -17,12 +28,12 @@ const Home = () => {
             Welcome to our luxurious salon — where beauty meets relaxation.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <a
-              href="/booking"
+            <button
+              onClick={handleBookAppointment}
               className="px-8 py-3 bg-pink-600 text-white rounded-md hover:bg-pink-700 transition"
             >
               Book Appointment
-            </a>
+            </button>
             {/* {!user && (
               <a
                 href="/login"

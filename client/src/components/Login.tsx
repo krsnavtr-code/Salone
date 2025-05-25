@@ -1,20 +1,26 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 export default function Login() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const location = useLocation();
   const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const from = location.state?.from?.pathname || '/';
+  const redirectUrl = searchParams.get('redirect') || from;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       setError("");
       const success = await login(email, password);
-      if (!success) {
+      if (success) {
+        navigate(redirectUrl);
+      } else {
         setError("Invalid credentials");
       }
     } catch (error: any) {

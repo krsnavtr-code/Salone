@@ -32,7 +32,10 @@ const Profile: React.FC = () => {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">My Profile</h1>
+      <h1 className="text-3xl font-bold mb-6">Profile</h1>
+      <p className="text-gray-600 mb-6">
+        Here you can view and manage your profile information.
+      </p>
 
       {error && (
         <div className="mb-6 px-4 py-3 rounded bg-red-100 text-red-700 border border-red-400">
@@ -53,15 +56,14 @@ const Profile: React.FC = () => {
           <span className="font-semibold text-gray-700">Phone:</span>{" "}
           {user?.phone || "N/A"}
         </div>
-      </div>
-
-      <div className="mt-8">
-        <button
-          onClick={logout}
-          className="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-6 rounded shadow"
-        >
-          Logout
-        </button>
+        <div className="mt-8">
+          <button
+            onClick={logout}
+            className="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-6 rounded shadow"
+          >
+            Logout
+          </button>
+        </div>
       </div>
     </div>
   );

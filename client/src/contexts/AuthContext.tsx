@@ -48,11 +48,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
       setUser(user);
+      
+      // Get the redirect URL from the URL parameters or default to '/'
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirectUrl = urlParams.get('redirect') || '/';
+      
       // Show success message and redirect
-      setError('Login successful! Redirecting to home...');
+      setError('Login successful! Redirecting...');
       setTimeout(() => {
         setError(null); // Clear success message before redirect
-        navigate('/');
+        navigate(redirectUrl);
       }, 1000);
       return true;
     } catch (error: any) {
