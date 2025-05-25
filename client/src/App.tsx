@@ -4,7 +4,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import Navbar from "./components/Navbar";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import Services from "./components/Services";
+import Services from "./pages/Services";
 import Gallery from "./components/Gallery";
 import Offers from "./components/Offers";
 import Testimonials from "./components/Testimonials";

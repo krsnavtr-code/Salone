@@ -1,8 +1,8 @@
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 
-// Load environment variables
-dotenv.config({ path: '../.env' });
+// Load environment variables from server directory
+dotenv.config({ path: '.env' });
 
 // Log database configuration
 console.log('Database configuration:', {

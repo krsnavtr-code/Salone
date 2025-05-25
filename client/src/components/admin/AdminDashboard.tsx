@@ -1,76 +1,156 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { getDashboardStats, DashboardStats } from '../../services/dashboardService';
 import { format } from 'date-fns';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 export default function AdminDashboard() {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Redirect if not admin
   useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const data = await getDashboardStats();
-        setStats(data);
-      } catch (error) {
-        console.error('Error fetching dashboard stats:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (user && user.role !== 'admin') {
+      navigate('/');
+    }
+  }, [user, navigate]);
 
-    fetchStats();
-  }, []);
+  // Fetch dashboard stats
+  useEffect(() => {
+    if (user && user.role === 'admin') {
+      const fetchStats = async () => {
+        try {
+          const data = await getDashboardStats();
+          setStats(data);
+        } catch (error) {
+          console.error('Error fetching dashboard stats:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchStats();
+    }
+  }, [user]);
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-8 text-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500 mx-auto"></div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-pink-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!stats) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-600">No stats available</p>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+        <div className="flex space-x-4">
+          <Link to="/admin/services" className="text-pink-600 hover:text-pink-800">Services</Link>
+          <Link to="/admin/appointments" className="text-pink-600 hover:text-pink-800">Appointments</Link>
+          <Link to="/admin/users" className="text-pink-600 hover:text-pink-800">Users</Link>
+          <Link to="/admin/analytics" className="text-pink-600 hover:text-pink-800">Analytics</Link>
+          <Link to="/admin/offers" className="text-pink-600 hover:text-pink-800">Offers</Link>
+          <Link to="/admin/settings" className="text-pink-600 hover:text-pink-800">Settings</Link>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h3 className="text-lg font-semibold mb-2">Total Appointments</h3>
+          <p className="text-3xl font-bold text-pink-600">{stats.totalAppointments}</p>
+        </div>
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h3 className="text-lg font-semibold mb-2">Today's Appointments</h3>
+          <p className="text-3xl font-bold text-pink-600">{stats.todayAppointments}</p>
+        </div>
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h3 className="text-lg font-semibold mb-2">Total Services</h3>
+          <p className="text-3xl font-bold text-pink-600">{stats.totalServices}</p>
+        </div>
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h3 className="text-lg font-semibold mb-2">Total Users</h3>
+          <p className="text-3xl font-bold text-pink-600">{stats.totalUsers}</p>
+        </div>
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h3 className="text-lg font-semibold mb-2">Total Revenue</h3>
+          <p className="text-3xl font-bold text-pink-600">${stats.totalRevenue}</p>
+        </div>
+      </div>
 
-        {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-pink-50 rounded-lg p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Total Appointments</p>
-                <p className="text-2xl font-bold text-pink-600">{stats?.totalAppointments || 0}</p>
-              </div>
-              <div className="bg-pink-100 rounded-full p-2">
-                <svg
-                  className="h-6 w-6 text-pink-500"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                  />
-                </svg>
-              </div>
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <h3 className="text-xl font-semibold mb-4">Upcoming Appointments</h3>
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={stats.upcomingAppointments}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="date" />
+            <YAxis />
+            <Tooltip />
+            <Bar dataKey="count" fill="#ff69b4" />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="bg-pink-50 rounded-lg p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600">Today's Appointments</p>
+              <p className="text-2xl font-bold text-pink-600">{stats.todayAppointments}</p>
+            </div>
+            <div className="bg-pink-100 rounded-full p-2">
+              <svg
+                className="h-6 w-6 text-pink-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
             </div>
           </div>
+        </div>
 
-          <div className="bg-pink-50 rounded-lg p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Today's Appointments</p>
-                <p className="text-2xl font-bold text-pink-600">{stats?.todayAppointments || 0}</p>
-              </div>
-              <div className="bg-pink-100 rounded-full p-2">
+        <div className="bg-pink-50 rounded-lg p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600">Total Services</p>
+              <p className="text-2xl font-bold text-pink-600">{stats.totalServices}</p>
+            </div>
+            <div className="bg-pink-100 rounded-full p-2">
+              <svg
+                className="h-6 w-6 text-pink-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
                 <svg
                   className="h-6 w-6 text-pink-500"
                   fill="none"
@@ -320,12 +400,12 @@ export default function AdminDashboard() {
                     strokeWidth={2}
                     d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
                   />
-                  <path
+                  {/* <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
                     d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
+                  /> */}
                 </svg>
               </div>
             </div>
@@ -340,6 +420,5 @@ export default function AdminDashboard() {
           <p className="text-gray-600">Welcome, {user?.name}! You're logged in as an admin.</p>
         </div>
       </div>
-    </div>
   );
 }

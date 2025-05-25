@@ -2,6 +2,10 @@ import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
+
+// Load environment variables from the server directory
+dotenv.config({ path: '.env' });
 import sequelize from './config/db.js';
 
 import authRoutes from './routes/auth.routes.js';

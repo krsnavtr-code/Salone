@@ -8,18 +8,14 @@ interface ProtectedRouteProps {
 }
 
 export default function ProtectedRoute({ children, adminOnly = false }: ProtectedRouteProps) {
-  const { user, loading } = useAuth();
-
-  if (loading) {
-    return <div className="text-center py-8">Loading...</div>;
-  }
+  const { user } = useAuth();
 
   if (!user) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" replace />;
   }
 
-  if (adminOnly && user.role !== 'admin') {
-    return <Navigate to="/" />;
+  if (adminOnly && user.role !== 'admin' && user.role !== 'superadmin') {
+    return <Navigate to="/" replace />;
   }
 
   return <>{children}</>;
