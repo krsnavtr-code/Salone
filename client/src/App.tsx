@@ -10,6 +10,7 @@ import Offers from "./components/Offers";
 import Testimonials from "./components/Testimonials";
 import Contact from "./components/Contact";
 import AdminDashboard from "./components/admin/AdminDashboard";
+import AdminLayout from "./components/admin/AdminLayout";
 import ServicesManagement from "./components/admin/ServicesManagement";
 import AppointmentsManagement from "./components/admin/AppointmentsManagement";
 import UserManagement from "./components/admin/UserManagement";
@@ -77,53 +78,45 @@ export default function App() {
               }
             />
             <Route
-              path="/admin/services"
+              path="/admin"
               element={
+                <ProtectedRoute adminOnly>
+                  <AdminLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<AdminDashboard />} />
+              <Route path="services" element={
                 <ProtectedRoute adminOnly>
                   <ServicesManagement />
                 </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/appointments"
-              element={
+              } />
+              <Route path="appointments" element={
                 <ProtectedRoute adminOnly>
                   <AppointmentsManagement />
                 </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/users"
-              element={
-                <ProtectedRoute adminOnly>
+              } />
+              <Route path="users" element={
+                <ProtectedRoute superAdminOnly>
                   <UserManagement />
                 </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/analytics"
-              element={
+              } />
+              <Route path="analytics" element={
                 <ProtectedRoute adminOnly>
                   <Analytics />
                 </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/offers"
-              element={
+              } />
+              <Route path="offers" element={
                 <ProtectedRoute adminOnly>
                   <OffersManagement />
                 </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/settings"
-              element={
+              } />
+              <Route path="settings" element={
                 <ProtectedRoute adminOnly>
                   <Settings />
                 </ProtectedRoute>
-              }
-            />
+              } />
+            </Route>
             <Route
               path="/admin/settings/staff"
               element={

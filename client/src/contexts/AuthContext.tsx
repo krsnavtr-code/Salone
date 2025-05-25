@@ -32,11 +32,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      setUser(JSON.parse(localStorage.getItem('user') || 'null'));
-    }
-    setLoading(false);
+    const loadUser = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (token) {
+          // Decode the token to get user info
+          const base64Url = token.split('.')[1];
+          const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+          const userData = JSON.parse(window.atob(base64));
+          
+          // Get the full user data from localStorage
+          const storedUser = localStorage.getItem('user');
+          if (storedUser) {
+            const user = JSON.parse(storedUser);
+            // Make sure the role from token matches the stored user
+            if (userData.role) {
+              user.role = userData.role;
+            }
+            setUser(user);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading user:', error);
+        // Clear invalid token
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUser();
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
@@ -45,20 +71,36 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // First, try to login with our backend
       const response = await api.post('/auth/login', { email, password });
       const { token, user } = response.data;
+      
+      if (!token || !user) {
+        throw new Error('Invalid response from server');
+      }
+      
+      // Store token and user data
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
       setUser(user);
       
-      // Get the redirect URL from the URL parameters or default to '/'
+      console.log('Login successful, user role:', user.role);
+      
+      // Get the redirect URL
       const urlParams = new URLSearchParams(window.location.search);
-      const redirectUrl = urlParams.get('redirect') || '/';
+      let redirectUrl = urlParams.get('redirect') || '/';
+      
+      // Redirect admin users to admin dashboard
+      if ((user.role === 'admin' || user.role === 'superadmin') && !redirectUrl.startsWith('/admin')) {
+        redirectUrl = '/admin';
+      }
       
       // Show success message and redirect
       setError('Login successful! Redirecting...');
-      setTimeout(() => {
-        setError(null); // Clear success message before redirect
-        navigate(redirectUrl);
-      }, 1000);
+      
+      // Use a small timeout to allow the UI to update
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      // Use navigate instead of window.location
+      navigate(redirectUrl, { replace: true });
+      
       return true;
     } catch (error: any) {
       console.error('Login error:', error);

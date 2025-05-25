@@ -38,11 +38,9 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-pink-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading dashboard...</p>
-        </div>
+      <div className="text-center py-16">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-pink-600 mx-auto"></div>
+        <p className="mt-4 text-gray-600">Loading dashboard...</p>
       </div>
     );
   }
@@ -58,18 +56,9 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-        <div className="flex space-x-4">
-          <Link to="/admin/services" className="text-pink-600 hover:text-pink-800">Services</Link>
-          <Link to="/admin/appointments" className="text-pink-600 hover:text-pink-800">Appointments</Link>
-          <Link to="/admin/users" className="text-pink-600 hover:text-pink-800">Users</Link>
-          <Link to="/admin/analytics" className="text-pink-600 hover:text-pink-800">Analytics</Link>
-          <Link to="/admin/offers" className="text-pink-600 hover:text-pink-800">Offers</Link>
-          <Link to="/admin/settings" className="text-pink-600 hover:text-pink-800">Settings</Link>
-        </div>
-      </div>
+    <div className="space-y-8">
+      <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <div className="bg-white rounded-lg shadow-md p-6">
           <h3 className="text-lg font-semibold mb-2">Total Appointments</h3>

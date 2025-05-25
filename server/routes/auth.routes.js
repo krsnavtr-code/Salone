@@ -106,13 +106,20 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    // Generate token
+    // Generate token with user role
     if (!process.env.JWT_SECRET) {
       console.error('JWT_SECRET is not configured');
       return res.status(500).json({ message: 'Server configuration error' });
     }
 
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '30d' });
+    const token = jwt.sign(
+      { 
+        id: user.id,
+        role: user.role  // Include role in the token
+      }, 
+      process.env.JWT_SECRET, 
+      { expiresIn: '30d' }
+    );
     
     // Return user data without sensitive info
     const userData = {
@@ -123,7 +130,11 @@ router.post('/login', async (req, res) => {
       role: user.role
     };
 
-    res.json({ token, user: userData });
+    console.log('Login successful for user:', user.email, 'Role:', user.role);
+    res.json({ 
+      token, 
+      user: userData 
+    });
   } catch (error) {
     console.error('Login error:', error);
     if (error.name === 'JsonWebTokenError') {
