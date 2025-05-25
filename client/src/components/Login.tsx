@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { FaHome } from "react-icons/fa";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -33,6 +34,7 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 to-white flex items-center justify-center px-4 py-12">
       <div className="bg-white shadow-2xl rounded-2xl p-8 max-w-md w-full border border-pink-100">
+        <a className="absolute hover:text-pink-600" href="/"><FaHome /></a>
         <h2 className="text-3xl font-bold text-center text-pink-600 mb-6">
           Welcome Back
         </h2>
