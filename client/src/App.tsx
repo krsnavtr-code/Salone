@@ -1,6 +1,5 @@
 import React from "react";
-import { Link, Outlet } from "react-router-dom";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Link, Outlet, Navigate } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import Navbar from "./components/Navbar";
 import Login from "./components/Login";
@@ -10,7 +9,7 @@ import Gallery from "./components/Gallery";
 import Offers from "./components/Offers";
 import Testimonials from "./components/Testimonials";
 import Contact from "./components/Contact";
-import AdminDashboard from "./components/admin/AdminDashboard";
+import Dashboard from "./pages/admin/Dashboard";
 import AdminLayout from "./components/admin/AdminLayout";
 import ServicesManagement from "./components/admin/ServicesManagement";
 import AppointmentsManagement from "./components/admin/AppointmentsManagement";
@@ -97,7 +96,8 @@ export default function App() {
             <AdminLayout />
           </ProtectedRoute>
         }>
-          <Route index element={<AdminDashboard />} />
+          <Route index element={<Navigate to="dashboard" replace />} />
+          <Route path="dashboard" element={<Dashboard />} />
           <Route path="services" element={
             <ProtectedRoute adminOnly>
               <ServicesManagement />

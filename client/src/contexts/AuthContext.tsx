@@ -89,7 +89,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       
       // Redirect admin users to admin dashboard
       if ((user.role === 'admin' || user.role === 'superadmin') && !redirectUrl.startsWith('/admin')) {
-        redirectUrl = '/admin';
+        redirectUrl = '/admin/dashboard';
       }
       
       // Show success message and redirect

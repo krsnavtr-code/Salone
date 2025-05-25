@@ -11,7 +11,7 @@ const AdminNav = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
   const navItems = useMemo(() => [
-    { to: '/admin', icon: <FaHome className="mr-3" />, label: 'Dashboard' },
+    { to: '/admin/dashboard', icon: <FaHome className="mr-3" />, label: 'Dashboard' },
     { to: '/admin/appointments', icon: <FaCalendarAlt className="mr-3" />, label: 'Appointments' },
     { to: '/admin/services', icon: <FaClipboardList className="mr-3" />, label: 'Services' },
     ...(user?.role === 'superadmin' ? [{ 
@@ -71,7 +71,7 @@ const AdminNav = () => {
                   to={item.to}
                   className={({ isActive }) =>
                     `flex items-center px-4 py-3 text-sm font-medium transition-colors ${
-                      isActive
+                      isActive || (item.to === '/admin/dashboard' && location.pathname === '/admin')
                         ? 'bg-pink-700 text-white'
                         : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                     }`

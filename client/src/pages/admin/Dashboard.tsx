@@ -5,7 +5,7 @@ import { getDashboardStats, DashboardStats } from '../../services/dashboardServi
 import { format } from 'date-fns';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-export default function AdminDashboard() {
+const Dashboard = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [stats, setStats] = useState<DashboardStats | null>(null);
@@ -410,4 +410,6 @@ export default function AdminDashboard() {
         </div>
       </div>
   );
-}
+};
+
+export default Dashboard;
