@@ -1,7 +1,5 @@
 import express from 'express';
 import cors from 'cors';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 
 // Load environment variables from the server directory
@@ -11,6 +9,7 @@ import sequelize from './config/db.js';
 import authRoutes from './routes/auth.routes.js';
 import serviceRoutes from './routes/service.routes.js';
 import appointmentRoutes from './routes/appointment.routes.js';
+import adminRoutes from './routes/admin.routes.js';
 
 // Log all environment variables for debugging
 console.log('Environment variables loaded:', {
@@ -38,6 +37,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api/appointments', appointmentRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.get('/', (req, res) => res.send('Salon API is running'));
 

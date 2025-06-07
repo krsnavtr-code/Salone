@@ -1,43 +1,214 @@
 # Dependencies
 node_modules
-yarn.lock
 package-lock.json
+yarn.lock
+pnpm-lock.yaml
 
 # Environment
 .env
+.env.*.local
+!.env.example
 
 # Build
-build
+dist/
+build/
+.next/
+.nuxt/
+.nuxt/
+.cache/
+.temp/
+.tmp/
 
 # Editor
-.idea
-.vscode
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 
 # Logs
 logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Temporary
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Dependency directories
+bower_components/
+jspm_packages/
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local development
+.local
+
+# Testing
+coverage/
+.nyc_output/
+
+# Production
+build/
+dist/
+
+# Misc
 .DS_Store
 Thumbs.db
 
 # Database
 *.sqlite
 *.db
+*.sql
 
-# IDE
-.idea
-.vscode
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
 
-# Vite
-vite.config.js
-vite.config.ts
-
-# Server
-server/node_modules
+# Server specific
+server/node_modules/
 server/package-lock.json
 server/yarn.lock
+server/*.sqlite
 
-# Client
-client/node_modules
+# Client specific
+client/node_modules/
 client/package-lock.json
 client/yarn.lock
+client/dist/
+
+# Admin credentials
+**/admin-credentials.json
+**/admin-*.json
+
+# Environment files (except example)
+!.env.example
+
+# Local development
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local development
+.local/
+
+# Testing
+coverage/
+.nyc_output/
+
+# Production
+build/
+dist/
+
+# Misc
+.DS_Store
+Thumbs.db
+
+# Database
+*.sqlite
+*.db
+*.sql
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Server specific
+server/node_modules/
+server/package-lock.json
+server/yarn.lock
+server/*.sqlite
+
+# Client specific
+client/node_modules/
+client/package-lock.json
+client/yarn.lock
+client/dist/
+
+# Admin credentials
+**/admin-credentials.json
+**/admin-*.json
+
+# Environment files (except example)
+!.env.example
+
+# Local development
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local development
+.local/
+
+# Testing
+coverage/
+.nyc_output/
+
+# Production
+build/
+dist/
+
+# Misc
+.DS_Store
+Thumbs.db
+
+# Database
+*.sqlite
+*.db
+*.sql
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Server specific
+server/node_modules/
+server/package-lock.json
+server/yarn.lock
+server/*.sqlite
+
+# Client specific
+client/node_modules/
+client/package-lock.json
+client/yarn.lock
+client/dist/
+
+# Admin credentials
+**/admin-credentials.json
+**/admin-*.json
+
+# Environment files (except example)
+!.env.example
+
+# Local development
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
