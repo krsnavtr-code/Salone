@@ -1,4 +1,5 @@
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
 const commonConfig = {
   username: process.env.DB_USER || 'root',
@@ -27,10 +28,10 @@ const commonConfig = {
     charset: 'utf8mb4',
     collate: 'utf8mb4_unicode_ci'
   },
-  timezone: '+05:30' // Set your timezone
+  timezone: '+05:30'
 };
 
-module.exports = {
+const config = {
   development: {
     ...commonConfig,
     logging: console.log
@@ -48,7 +49,6 @@ module.exports = {
       max: 20,
       min: 5
     },
-    // Add production-specific options here
     dialectOptions: {
       ...commonConfig.dialectOptions,
       ssl: process.env.DB_SSL === 'true' ? {
@@ -58,3 +58,5 @@ module.exports = {
     }
   }
 };
+
+export default config;

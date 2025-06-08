@@ -11,22 +11,52 @@ const router = express.Router();
 // Middleware to verify admin role
 const verifyAdmin = async (req, res, next) => {
   try {
+    console.log('=== verifyAdmin Middleware ===');
+    console.log('Authorization header:', req.headers.authorization);
+    
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
+      console.log('No token provided');
       return res.status(401).json({ message: 'No token provided' });
     }
 
+    console.log('Token found, verifying...');
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findByPk(decoded.userId);
+    console.log('Decoded token:', JSON.stringify(decoded, null, 2));
+    
+    const user = await User.findByPk(decoded.id);
+    console.log('User found:', user ? {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      isAdmin: user.role === 'admin' || user.role === 'superadmin'
+    } : 'User not found');
 
-    if (!user || user.role !== 'admin') {
-      return res.status(403).json({ message: 'Admin access required' });
+    if (!user) {
+      console.log('User not found in database');
+      return res.status(403).json({ message: 'User not found' });
     }
 
+    // Check if user has admin or superadmin role
+    const adminRoles = ['admin', 'superadmin'];
+    if (!adminRoles.includes(user.role)) {
+      console.log('User does not have admin role, actual role:', user.role);
+      return res.status(403).json({ 
+        message: 'Admin access required',
+        userRole: user.role,
+        userId: user.id
+      });
+    }
+
+    console.log('User is admin, proceeding...');
     req.user = user;
     next();
   } catch (error) {
-    res.status(401).json({ message: 'Invalid token' });
+    console.error('Error in verifyAdmin middleware:', error);
+    res.status(401).json({ 
+      message: 'Invalid token',
+      error: error.message 
+    });
   }
 };
 

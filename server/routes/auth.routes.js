@@ -60,7 +60,10 @@ router.post('/register', async (req, res) => {
 
     // Generate JWT token
     const token = jwt.sign(
-      { userId: user.id },
+      { 
+        id: user.id,
+        role: user.role
+      },
       process.env.JWT_SECRET,
       { expiresIn: '24h' }
     );
@@ -94,11 +97,18 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Email and password are required' });
     }
 
-    // Find user by email
-    const user = await User.findOne({ where: { email } });
+    // Find user by email with password_hash included
+    const user = await User.scope('forAuth').findOne({ where: { email } });
     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
+    
+    // Log for debugging
+    console.log('User found for login:', {
+      id: user.id,
+      email: user.email,
+      hasPasswordHash: !!user.password_hash
+    });
 
     // Verify password
     const isPasswordValid = await bcrypt.compare(password, user.password_hash);
