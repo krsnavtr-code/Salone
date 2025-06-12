@@ -32,3 +32,56 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+// Service types
+export interface ServiceResponse {
+  id: number;
+  name: string;
+  description: string | null;
+  price: number | string;
+  duration: number | string;
+  category: string;
+  is_active: boolean;
+  slug: string;
+  created_at: string;
+  updated_at: string;
+  [key: string]: any; // For any additional properties
+}
+
+// Service functions
+export const serviceApi = {
+  // Get all services (public endpoint)
+  getAllServices: async (): Promise<ServiceResponse[]> => {
+    try {
+      const response = await api.get<ServiceResponse[]>('/services');
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching services:', error);
+      throw error;
+    }
+  },
+
+  // Get services by category (admin endpoint)
+  getServicesByCategory: async (categoryId: string | number): Promise<ServiceResponse[]> => {
+    try {
+      const response = await api.get<ServiceResponse[]>(`/services/category/${categoryId}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching services for category ${categoryId}:`, error);
+      throw error;
+    }
+  },
+
+  // Get service by ID
+  getServiceById: async (id: string | number): Promise<ServiceResponse> => {
+    try {
+      const response = await api.get<ServiceResponse>(`/services/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching service ${id}:`, error);
+      throw error;
+    }
+  }
+};
+
+export default api;

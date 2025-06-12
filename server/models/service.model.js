@@ -148,7 +148,7 @@ const Service = sequelize.define('Service', {
       return {
         where: { category_id: categoryId }
       };
-    },
+    }, 
     search(query) {
       return {
         where: {
@@ -218,8 +218,18 @@ const generateSlug = async (service) => {
     }
     
     service.slug = slug;
+    return service;
   }
+  return service;
 };
+
+// Generate slug before validation to ensure it's set
+Service.beforeValidate(async (service) => {
+  if (!service.slug && service.name) {
+    await generateSlug(service);
+  }
+  return service;
+});
 
 Service.beforeCreate(generateSlug);
 Service.beforeUpdate(generateSlug);
@@ -245,5 +255,5 @@ Service.associate = function(models) {
   });
 };
 
-export { SERVICE_CATEGORIES };
+// export { SERVICE_CATEGORIES };
 export default Service;
