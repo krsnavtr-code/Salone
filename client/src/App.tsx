@@ -2,7 +2,6 @@ import React from "react";
 import { Routes, Route, Link, Outlet, Navigate } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import Navbar from "./components/Navbar";
-import Register from "./components/Register";
 import Services from "./pages/Services";
 import Gallery from "./components/Gallery";
 import Offers from "./components/Offers";
@@ -35,12 +34,6 @@ const PublicLayout = ({ children }: { children: React.ReactNode }) => (
   </div>
 );
 
-// Layout for auth pages (login/register) without Navbar
-const AuthLayout = ({ children }: { children: React.ReactNode }) => (
-  <div className="min-h-screen bg-gray-50">
-    {children}
-  </div>
-);
 
 export default function App() {
   return (
@@ -104,18 +97,7 @@ export default function App() {
           />
         </Route>
 
-        {/* Register route without Navbar */}
-        <Route
-          element={
-            <AuthLayout>
-              <Outlet />
-            </AuthLayout>
-          }
-        >
-          <Route path="/register" element={<Register />} />
-        </Route>
-
-        {/* Admin routes with AdminLayout (includes its own navigation) */}
+{/* Admin routes with AdminLayout (includes its own navigation) */}
         <Route
           path="/admin"
           element={

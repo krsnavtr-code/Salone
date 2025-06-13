@@ -6,9 +6,10 @@ interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess?: () => void;
+  onSwitchToRegister: () => void;
 }
 
-export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onSuccess }) => {
+export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onSuccess, onSwitchToRegister }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
@@ -265,11 +266,18 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onSucce
               <span className="px-2 bg-white text-gray-500">
                 New to our platform?
               </span>
-              <Link
-                to="/register"
-                onClick={onClose}
-                className="text-sm  font-medium text-pink-600 hover:text-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
-              >Register</Link>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onClose();
+                  onSwitchToRegister();
+                }}
+                className="text-sm p-0 border-none bg-transparent font-medium text-pink-600 hover:text-pink-700 focus:outline-none"
+                disabled={isLoading}
+              >
+                Register
+              </button>
             </div>
           </div>
         </div>

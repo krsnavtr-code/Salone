@@ -2,11 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { LoginModal } from "./LoginModal";
+import { RegisterModal } from "./RegisterModal";
 
 const Navbar = () => {
   const { user, logout, isLoginModalOpen, openLoginModal, closeLoginModal, isLoading } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const userMenuRef = useRef<HTMLDivElement>(null);
@@ -42,6 +44,27 @@ const Navbar = () => {
     e.preventDefault();
     openLoginModal();
     setIsMobileMenuOpen(false);
+  };
+
+  const handleRegisterClick = () => {
+    closeLoginModal();
+    setIsRegisterModalOpen(true);
+    setIsMobileMenuOpen(false);
+  };
+
+  const handleSwitchToLogin = (e?: React.MouseEvent) => {
+    e?.preventDefault?.();
+    setIsRegisterModalOpen(false);
+    openLoginModal();
+  };
+
+  const closeRegisterModal = () => {
+    setIsRegisterModalOpen(false);
+  };
+
+  const handleRegisterSuccess = () => {
+    closeRegisterModal();
+    // Additional success handling can be added here
   };
 
   const handleLogout = async () => {
@@ -113,13 +136,25 @@ const Navbar = () => {
             {/* Desktop Auth Buttons */}
             <div className="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-4">
               {!user ? (
-                <button
-                  onClick={handleLoginClick}
-                  disabled={isLoading}
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  {isLoading ? 'Signing in...' : 'Sign In'}
-                </button>
+                <>
+                  <button
+                    onClick={handleLoginClick}
+                    disabled={isLoading}
+                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    {isLoading ? 'Signing in...' : 'Sign In'}
+                  </button>
+                  {/* <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleRegisterClick();
+                    }}
+                    className="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? 'Loading...' : 'Register'}
+                  </button> */}
+                </>
               ) : (
                 <div className="relative ml-3" ref={userMenuRef}>
                   <div>
@@ -249,13 +284,25 @@ const Navbar = () => {
             ))}
             
             {!user ? (
-              <button
-                onClick={handleLoginClick}
-                disabled={isLoading}
-                className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                {isLoading ? 'Signing in...' : 'Sign In'}
-              </button>
+              <>
+                <button
+                  onClick={handleLoginClick}
+                  disabled={isLoading}
+                  className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  {isLoading ? 'Signing in...' : 'Sign In'}
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleRegisterClick();
+                  }}
+                  className="ml-4 px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Loading...' : 'Register'}
+                </button>
+              </>
             ) : (
               <>
                 <div className="pt-4 border-t border-gray-200">
@@ -303,6 +350,18 @@ const Navbar = () => {
           closeLoginModal();
           // Optionally add any success callback logic here
         }}
+        onSwitchToRegister={() => {
+          closeLoginModal();
+          setIsRegisterModalOpen(true);
+        }}
+      />
+
+      {/* Register Modal */}
+      <RegisterModal 
+        isOpen={isRegisterModalOpen}
+        onClose={closeRegisterModal}
+        onSuccess={handleRegisterSuccess}
+        onSwitchToLogin={handleSwitchToLogin}
       />
     </>
   );
