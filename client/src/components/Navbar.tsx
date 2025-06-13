@@ -177,7 +177,7 @@ const Navbar = () => {
                     <div className="py-1" role="none">
                       <Link
                         to="/profile"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        className="block px-4 py-2 text-sm text-gray-700"
                         role="menuitem"
                         onClick={() => setIsUserMenuOpen(false)}
                       >
@@ -185,7 +185,7 @@ const Navbar = () => {
                       </Link>
                       <Link
                         to="/appointments"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        className="block px-4 py-2 text-sm text-gray-700"
                         role="menuitem"
                         onClick={() => setIsUserMenuOpen(false)}
                       >
@@ -194,7 +194,7 @@ const Navbar = () => {
                       <button
                         onClick={handleLogout}
                         disabled={isLoading}
-                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
                         role="menuitem"
                       >
                         {isLoading ? 'Signing out...' : 'Sign out'}
@@ -308,21 +308,21 @@ const Navbar = () => {
                 <Link
                   to="/profile"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 transition-colors"
                 >
                   Your Profile
                 </Link>
                 <Link
                   to="/appointments"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 transition-colors"
                 >
                   Appointments
                 </Link>
                 <button
                   onClick={handleLogout}
                   disabled={isLoading}
-                  className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   {isLoading ? 'Signing out...' : 'Sign out'}
                 </button>
