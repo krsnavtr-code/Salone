@@ -2,7 +2,6 @@ import React from "react";
 import { Routes, Route, Link, Outlet, Navigate } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import Navbar from "./components/Navbar";
-import Login from "./components/Login";
 import Register from "./components/Register";
 import Services from "./pages/Services";
 import Gallery from "./components/Gallery";
@@ -105,7 +104,7 @@ export default function App() {
           />
         </Route>
 
-        {/* Auth routes without Navbar */}
+        {/* Register route without Navbar */}
         <Route
           element={
             <AuthLayout>
@@ -113,7 +112,6 @@ export default function App() {
             </AuthLayout>
           }
         >
-          <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Route>
 
