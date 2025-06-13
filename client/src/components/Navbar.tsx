@@ -107,7 +107,7 @@ const Navbar = () => {
     <>
       <nav className="bg-white shadow-sm relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
+          <div className="flex justify-between h-12">
             <div className="flex items-center">
               <Link to="/" className="flex-shrink-0 flex items-center">
                 <span className="text-xl font-bold text-pink-600 hover:text-pink-700 transition-colors">
@@ -140,20 +140,10 @@ const Navbar = () => {
                   <button
                     onClick={handleLoginClick}
                     disabled={isLoading}
-                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="inline-flex items-center border-none text-sm font-medium rounded-md shadow-sm text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
                     {isLoading ? 'Signing in...' : 'Sign In'}
                   </button>
-                  {/* <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleRegisterClick();
-                    }}
-                    className="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
-                    disabled={isLoading}
-                  >
-                    {isLoading ? 'Loading...' : 'Register'}
-                  </button> */}
                 </>
               ) : (
                 <div className="relative ml-3" ref={userMenuRef}>

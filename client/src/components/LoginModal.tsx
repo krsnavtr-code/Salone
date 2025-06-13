@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 interface LoginModalProps {
@@ -16,7 +16,6 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onSucce
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-  const navigate = useNavigate();
   const { login, isAuthenticated } = useAuth();
 
   // Reset form when modal is opened/closed
@@ -96,7 +95,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onSucce
 
   return (
     <div
-      className={`fixed inset-0 bg-black from-pink-50 bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-300 ${
+      className={`fixed inset-0 bg-black from-pink-50 bg-opacity-60 flex items-center justify-center z-50 transition-opacity duration-300 ${
         isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
       }`}
       onClick={(e) => e.target === e.currentTarget && onClose()}
@@ -112,26 +111,6 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onSucce
         }`}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* <button
-          onClick={onClose}
-          className="text-pink-600 hover:text-pink-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-md p-1"
-          disabled={isLoading}
-          aria-label="Close login modal"
-        >
-          <svg
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button> */}
         <div className="flex flex-col justify-between items-center mb-4">
           <h2 className="text-3xl font-bold text-center text-pink-600 mb-6">
             Welcome Back

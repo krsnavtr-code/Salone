@@ -116,7 +116,7 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({
 
   return (
     <div 
-      className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-300 ${
+      className={`fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 transition-opacity duration-300 ${
         isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}
       onClick={(e) => e.target === e.currentTarget && onClose()}
