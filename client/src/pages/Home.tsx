@@ -7,10 +7,15 @@ const Home = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  const { openLoginModal } = useAuth();
+
   const handleBookAppointment = (e: React.MouseEvent) => {
     e.preventDefault();
     if (!user) {
-      navigate('/login', { state: { from: '/booking' } });
+      // Store the intended path
+      localStorage.setItem('redirectAfterLogin', '/booking');
+      // Open the login modal
+      openLoginModal();
     } else {
       navigate('/booking');
     }
@@ -34,14 +39,17 @@ const Home = () => {
             >
               Book Appointment
             </button>
-            {/* {!user && (
-              <a
-                href="/login"
+            {!user && (
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  openLoginModal();
+                }}
                 className="px-8 py-3 bg-pink-100 text-pink-700 rounded-md hover:bg-pink-200 transition"
               >
                 Login
-              </a>
-            )} */}
+              </button>
+            )}
           </div>
         </div>
       </section>

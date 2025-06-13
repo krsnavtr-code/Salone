@@ -27,7 +27,7 @@ const AdminNav = () => {
   const handleLogout = async () => {
     try {
       await logout();
-      navigate('/login');
+      // No need to navigate to /login as the AuthProvider will handle the redirect
     } catch (error) {
       console.error('Logout error:', error);
     }

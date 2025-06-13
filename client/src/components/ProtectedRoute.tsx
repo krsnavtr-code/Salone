@@ -51,10 +51,19 @@ export default function ProtectedRoute({
     );
   }
 
-  // Redirect to login if not authenticated
+  // If not authenticated, open login modal and store the intended path
   if (!user) {
+    const { openLoginModal } = useAuth();
     const redirectPath = location.pathname + location.search;
-    return <Navigate to={`/login?redirect=${encodeURIComponent(redirectPath)}`} replace />;
+    
+    // Store the redirect path in localStorage
+    localStorage.setItem('redirectAfterLogin', redirectPath);
+    
+    // Open the login modal
+    openLoginModal();
+    
+    // Redirect to home page (or current page without the /login path)
+    return <Navigate to="/" replace />;
   }
 
   // Redirect to home if not authorized

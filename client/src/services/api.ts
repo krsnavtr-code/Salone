@@ -1,6 +1,11 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 
 const API_URL = 'http://localhost:5000/api';
+
+// Extend the AxiosRequestConfig to include our custom _retry property
+interface RetryableAxiosRequestConfig extends AxiosRequestConfig {
+  _retry?: boolean;
+}
 
 export const api = axios.create({
   baseURL: API_URL,
@@ -20,18 +25,71 @@ api.interceptors.request.use((config) => {
   return Promise.reject(error);
 });
 
+// Store the original request config for retry
+const pendingRequests: Array<() => void> = [];
+let onUnauthenticated: (() => void) | null = null;
+
+// Function to set the callback for when authentication is required
+export const setOnUnauthenticated = (callback: (() => void) | null) => {
+  onUnauthenticated = callback;
+};
+
 // Add a response interceptor to handle errors
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      // Handle unauthorized access
+  async (error) => {
+    const originalRequest = error.config as RetryableAxiosRequestConfig;
+    
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      // If this is the first time we're seeing this 401, handle it
+      originalRequest._retry = true;
+      
+      // Remove the invalid token
       localStorage.removeItem('token');
-      window.location.href = '/login';
+      delete api.defaults.headers.common['Authorization'];
+      
+      // Store the current URL for redirect after login
+      const currentPath = window.location.pathname + window.location.search;
+      localStorage.setItem('redirectAfterLogin', currentPath);
+      
+      // If we have a callback for unauthenticated state, call it
+      if (onUnauthenticated) {
+        onUnauthenticated();
+      } else {
+        // Fallback to redirect if no callback is set
+        window.location.href = '/?showLogin=true';
+      }
+      
+      // Return a promise that will be resolved after successful login
+      return new Promise((resolve, reject) => {
+        pendingRequests.push(() => {
+          // Retry the original request with new token
+          const token = localStorage.getItem('token');
+          if (token && originalRequest) {
+            // Ensure headers exist
+            if (!originalRequest.headers) {
+              originalRequest.headers = {};
+            }
+            originalRequest.headers.Authorization = `Bearer ${token}`;
+            resolve(api(originalRequest));
+          } else {
+            reject(error);
+          }
+        });
+      });
     }
+    
     return Promise.reject(error);
   }
 );
+
+// Export a function to retry pending requests after successful login
+export const retryPendingRequests = () => {
+  while (pendingRequests.length > 0) {
+    const request = pendingRequests.shift();
+    if (request) request();
+  }
+};
 
 // Service types
 export interface ServiceResponse {

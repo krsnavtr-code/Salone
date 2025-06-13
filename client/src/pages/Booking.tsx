@@ -32,7 +32,7 @@ interface Service {
 }
 
 const Booking = () => {
-  const { user, loading } = useAuth();
+  const { user, loading, openLoginModal } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -144,13 +144,21 @@ const Booking = () => {
     }
   };
 
-  if (loading) {
-    return <div className="text-center py-8">Loading...</div>;
-  }
+  useEffect(() => {
+    if (!user && !loading) {
+      // Store the intended path
+      localStorage.setItem('redirectAfterLogin', location.pathname);
+      // Open the login modal
+      openLoginModal();
+    }
+  }, [user, loading, openLoginModal, location.pathname]);
 
-  // Redirect to login if not authenticated
-  if (!loading && !user) {
-    return <Navigate to={`/login?redirect=${encodeURIComponent(location.pathname)}`} replace />;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-600"></div>
+      </div>
+    );
   }
 
   return (

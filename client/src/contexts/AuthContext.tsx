@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { api } from '../services/api';
+import { api, retryPendingRequests, setOnUnauthenticated } from '../services/api';
 
 interface User {
   id: number;
@@ -35,6 +35,19 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [error, setError] = useState<string | null>(null);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const navigate = useNavigate();
+  
+  const openLoginModal = () => setIsLoginModalOpen(true);
+  const closeLoginModal = () => setIsLoginModalOpen(false);
+  
+  // Set the onUnauthenticated callback when the component mounts
+  useEffect(() => {
+    setOnUnauthenticated(openLoginModal);
+    
+    // Clean up the callback when the component unmounts
+    return () => {
+      setOnUnauthenticated(null);
+    };
+  }, [openLoginModal]);
 
   useEffect(() => {
     const validateToken = async () => {
@@ -73,6 +86,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       
       setUser(user);
       closeLoginModal();
+      
+      // Retry any pending API requests that failed due to 401
+      retryPendingRequests();
+      
+      // Handle redirect after successful login
+      const redirectPath = localStorage.getItem('redirectAfterLogin');
+      if (redirectPath) {
+        localStorage.removeItem('redirectAfterLogin');
+        navigate(redirectPath);
+      }
+      
       return true;
     } catch (error: any) {
       console.error('Login failed:', error);
@@ -96,6 +120,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       
       setUser(user);
       closeLoginModal();
+      
+      // Retry any pending API requests that failed due to 401
+      retryPendingRequests();
+      
+      // Handle redirect after successful registration
+      const redirectPath = localStorage.getItem('redirectAfterLogin');
+      if (redirectPath) {
+        localStorage.removeItem('redirectAfterLogin');
+        navigate(redirectPath);
+      }
+      
       return true;
     } catch (error: any) {
       console.error('Registration failed:', error);
@@ -119,8 +154,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  const openLoginModal = () => setIsLoginModalOpen(true);
-  const closeLoginModal = () => setIsLoginModalOpen(false);
+
 
   const contextValue = {
     user,

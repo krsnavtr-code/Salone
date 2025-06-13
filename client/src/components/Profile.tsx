@@ -9,13 +9,18 @@ const Profile: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const { openLoginModal } = useAuth();
+
   useEffect(() => {
     if (!user) {
-      navigate("/login");
+      // Store the intended path
+      localStorage.setItem('redirectAfterLogin', '/profile');
+      // Open the login modal
+      openLoginModal();
     } else {
       fetchProfile();
     }
-  }, [user]);
+  }, [user, openLoginModal]);
 
   const fetchProfile = async () => {
     try {
@@ -28,7 +33,13 @@ const Profile: React.FC = () => {
     }
   };
 
-  if (loading) return <div className="text-center py-10">Loading...</div>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-600"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
